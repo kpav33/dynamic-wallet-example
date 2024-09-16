@@ -11,7 +11,18 @@
   "dependencies": {
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.11"
+    "next": "14.2.11",
+    "@dynamic-labs/sdk-react-core": "^3.0.0-alpha",
+    "viem": "*",
+    "@dynamic-labs/wagmi-connector": "^3.0.0-alpha",
+    "@tanstack/react-query": "^5.27.5",
+    "wagmi": "^2.5.7",
+    "@dynamic-labs/ethereum": "^3.0.0-alpha",
+    "@dynamic-labs/solana": "^3.0.0-alpha",
+    "@dynamic-labs/bitcoin": "^3.0.0-alpha",
+    "crypto-browserify": "^3.12.0",
+    "stream-browserify": "^3.0.0",
+    "process": "^0.11.10"
   },
   "devDependencies": {
     "typescript": "^5",
@@ -20,5 +31,12 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.11"
+  },
+  "browser": {
+    "crypto": false
+  },
+  "overrides": {
+    "rpc-websockets": "7.10.0",
+    "@solana/web3.js": "1.91.6"
   }
 }
