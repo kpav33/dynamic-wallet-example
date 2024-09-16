@@ -17,6 +17,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   }
 
   return (
+    // Get all connector for the chains you want to use
     <DynamicContextProvider
       theme="auto"
       settings={{
@@ -28,6 +29,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         ],
       }}
     >
+      {/* Wagmi setup */}
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <DynamicWagmiConnector>{children}</DynamicWagmiConnector>

@@ -1,7 +1,7 @@
-
 import { http, createConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
 
+// Setup wagmi
 export const config = createConfig({
   chains: [mainnet],
   multiInjectedProviderDiscovery: false,

@@ -1,31 +1,38 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { useDynamicContext, useIsLoggedIn, useUserWallets } from "@dynamic-labs/sdk-react-core";
-import { isEthereumWallet } from '@dynamic-labs/ethereum'
-import { isSolanaWallet } from '@dynamic-labs/solana'
-import { isBitcoinWallet } from '@dynamic-labs/bitcoin'
+"use client";
+import { useState, useEffect } from "react";
+import {
+  useDynamicContext,
+  useIsLoggedIn,
+  useUserWallets,
+} from "@dynamic-labs/sdk-react-core";
+import { isEthereumWallet } from "@dynamic-labs/ethereum";
+import { isSolanaWallet } from "@dynamic-labs/solana";
+// import { isBitcoinWallet } from '@dynamic-labs/bitcoin'
 
-import './Methods.css';
+import "./Methods.css";
 
 export default function DynamicMethods({ isDarkMode }) {
   const isLoggedIn = useIsLoggedIn();
   const { sdkHasLoaded, primaryWallet, user } = useDynamicContext();
   const userWallets = useUserWallets();
   const [isLoading, setIsLoading] = useState(true);
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState("");
 
-  
   const safeStringify = (obj) => {
     const seen = new WeakSet();
-    return JSON.stringify(obj, (key, value) => {
-      if (typeof value === 'object' && value !== null) {
-        if (seen.has(value)) {
-          return '[Circular]';
+    return JSON.stringify(
+      obj,
+      (key, value) => {
+        if (typeof value === "object" && value !== null) {
+          if (seen.has(value)) {
+            return "[Circular]";
+          }
+          seen.add(value);
         }
-        seen.add(value);
-      }
-      return value;
-    }, 2);
+        return value;
+      },
+      2
+    );
   };
 
   useEffect(() => {
@@ -35,7 +42,7 @@ export default function DynamicMethods({ isDarkMode }) {
   }, [sdkHasLoaded, isLoggedIn, primaryWallet]);
 
   function clearResult() {
-    setResult('');
+    setResult("");
   }
 
   function showUser() {
@@ -46,81 +53,91 @@ export default function DynamicMethods({ isDarkMode }) {
     setResult(safeStringify(userWallets));
   }
 
+  async function fetchPublicClient() {
+    if (!primaryWallet || !isEthereumWallet(primaryWallet)) return;
 
-    async function fetchPublicClient() {
-        if(!primaryWallet || !isEthereumWallet(primaryWallet)) return;
-
-        const publicClient = await primaryWallet.getPublicClient();
-        setResult(safeStringify(publicClient));
-    }
-
-    async function fetchWalletClient() {
-        if(!primaryWallet || !isEthereumWallet(primaryWallet)) return;
-
-        const walletClient = await primaryWallet.getWalletClient();
-        setResult(safeStringify(walletClient));
-    }
-
-    async function signMessage() {
-        if(!primaryWallet || !isEthereumWallet(primaryWallet)) return;
-
-        const signature = await primaryWallet.signMessage("Hello World");
-        setResult(signature);
-    }
-
-
-    async function fetchConnection() {
-        if(!primaryWallet || !isSolanaWallet(primaryWallet)) return;
-
-        const connection = await primaryWallet.getConnection();
-        setResult(safeStringify(connection));
-    }
-
-    async function fetchSigner() {
-        if(!primaryWallet || !isSolanaWallet(primaryWallet)) return;
-
-        const signer = await primaryWallet.getSigner();
-        setResult(safeStringify(signer));
-    }
-
-    async function signMessage() {
-        if(!primaryWallet || !isSolanaWallet(primaryWallet)) return;
-
-        const signature = await primaryWallet.signMessage("Hello World");
-        setResult(signature);
-    }
-
-
-
-
-   return (
-    <>
-      {!isLoading && (
-        <div className="dynamic-methods" data-theme={isDarkMode ? 'dark' : 'light'}>
-          <div className="methods-container">
-            <button className="btn btn-primary" onClick={showUser}>Fetch User</button>
-            <button className="btn btn-primary" onClick={showUserWallets}>Fetch User Wallets</button>
-
-            
-    {isEthereumWallet(primaryWallet) &&
-      <>
-        <button className="btn btn-primary" onClick={fetchPublicClient}>Fetch Public Client</button>
-        <button className="btn btn-primary" onClick={fetchWalletClient}>Fetch Wallet Client</button>
-        <button className="btn btn-primary" onClick={signMessage}>Sign 'Hello World' on Ethereum</button>    
-      </>
-    }
-
-
-    {isSolanaWallet(primaryWallet) &&
-      <>
-        <button className="btn btn-primary" onClick={fetchConnection}>Fetch Connection</button>
-        <button className="btn btn-primary" onClick={fetchSigner}>Fetch Signer</button>
-          <button className="btn btn-primary" onClick={signMessage}>Sign 'Hello World' on Solana</button>    
-      </>
+    const publicClient = await primaryWallet.getPublicClient();
+    setResult(safeStringify(publicClient));
   }
 
+  async function fetchWalletClient() {
+    if (!primaryWallet || !isEthereumWallet(primaryWallet)) return;
 
-        </div>
+    const walletClient = await primaryWallet.getWalletClient();
+    setResult(safeStringify(walletClient));
+  }
+
+  async function signMessage() {
+    if (!primaryWallet || !isEthereumWallet(primaryWallet)) return;
+
+    const signature = await primaryWallet.signMessage("Hello World");
+    setResult(signature);
+  }
+
+  async function fetchConnection() {
+    if (!primaryWallet || !isSolanaWallet(primaryWallet)) return;
+
+    const connection = await primaryWallet.getConnection();
+    setResult(safeStringify(connection));
+  }
+
+  async function fetchSigner() {
+    if (!primaryWallet || !isSolanaWallet(primaryWallet)) return;
+
+    const signer = await primaryWallet.getSigner();
+    setResult(safeStringify(signer));
+  }
+
+  async function signMessage() {
+    if (!primaryWallet || !isSolanaWallet(primaryWallet)) return;
+
+    const signature = await primaryWallet.signMessage("Hello World");
+    setResult(signature);
+  }
+
+  return (
+    <>
+      {!isLoading && (
+        <div
+          className="dynamic-methods"
+          data-theme={isDarkMode ? "dark" : "light"}
+        >
+          <div className="methods-container">
+            <button className="btn btn-primary" onClick={showUser}>
+              Fetch User
+            </button>
+            <button className="btn btn-primary" onClick={showUserWallets}>
+              Fetch User Wallets
+            </button>
+
+            {isEthereumWallet(primaryWallet) && (
+              <>
+                <button className="btn btn-primary" onClick={fetchPublicClient}>
+                  Fetch Public Client
+                </button>
+                <button className="btn btn-primary" onClick={fetchWalletClient}>
+                  Fetch Wallet Client
+                </button>
+                <button className="btn btn-primary" onClick={signMessage}>
+                  Sign &apos;Hello World&apos; on Ethereum
+                </button>
+              </>
+            )}
+
+            {isSolanaWallet(primaryWallet) && (
+              <>
+                <button className="btn btn-primary" onClick={fetchConnection}>
+                  Fetch Connection
+                </button>
+                <button className="btn btn-primary" onClick={fetchSigner}>
+                  Fetch Signer
+                </button>
+                <button className="btn btn-primary" onClick={signMessage}>
+                  Sign &apos;Hello World&apos; on Solana
+                </button>
+              </>
+            )}
+          </div>
           {result && (
             <div className="results-container">
               <pre className="results-text">{result}</pre>
@@ -128,7 +145,9 @@ export default function DynamicMethods({ isDarkMode }) {
           )}
           {result && (
             <div className="clear-container">
-              <button className="btn btn-primary" onClick={clearResult}>Clear</button>
+              <button className="btn btn-primary" onClick={clearResult}>
+                Clear
+              </button>
             </div>
           )}
         </div>
